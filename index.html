@@ -76,18 +76,10 @@
         <section class="products" id="products">
             <div class="container">
                 <h2>Latest Products sales</h2>
-                <div class="product-grid" id="productGrid">
-                    <div class="product-card">
-                        <img src="s.png" alt="Product 1" />
-                        <h3>Product 1</h3>
-                        <div class="price">$29.99</div>
-                        <a href="#" class="btn">Add to Cart</a>
-                    </div>
-                </div>
+                <div id="loadingMessage">Loading products...</div>
+                <div id="errorMessage" style="display: none; color: red"></div>
+                <div class="product-grid" id="productGrid"></div>
             </div>
-            <div id="loadingMessage">Loading products...</div>
-            <div id="errorMessage" style="display: none; color: red"></div>
-            <div class="product-grid" id="productGrid"></div>
         </section>
 
         <script src="scripts/app.js"></script>
