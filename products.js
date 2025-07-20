@@ -3,7 +3,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
-// ✅ Where to display the product
+// ✅ Where to display the products
 const productDetail = document.getElementById("product-details");
 
 if (!productId) {
