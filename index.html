@@ -4,81 +4,92 @@
   This project will auto-refresh as you edit the HTML, CSS and JS. See README.md for more info (including how to disable auto-refresh and install packages).
 -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Frontend</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>E-Commerce Frontend</title>
+        <link rel="stylesheet" href="styles/main.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
 
-   
-<body>
-    <header>
-        
-         <div class="container">
-            <div class="navbar">
-                
-                <div class="logo">
-                    <img src="logo2.png" width="50px">
-                </div>
-                <div class="hamburger" onclick="toggleMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <nav class="nav" id="nav">
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="products.html">Product</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                    <div class="right-nav">
-                        <div class="search-bar">
-                            <input type="text" placeholder="search for products">
-                            <button type="submit">Search</button>
-                        </div>
-                        <div class="account">
-                            <a href=""><i class="fa-solid fa-circle-user"></i></a>
-                        </div>
-                        <div class="cart">
-                            <a href="cart.html"><img src="c.jpg" width="30px" height="30px"></a> 
-                            <span>0</span>
-                        </div>
+    <body>
+        <header>
+            <div class="container">
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="logo2.png" width="50px" />
                     </div>
-                </nav>
+                    <div class="hamburger" onclick="toggleMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="nav" id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Product</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                        <div class="right-nav">
+                            <div class="search-bar">
+                                <input
+                                    type="text"
+                                    placeholder="search for products"
+                                />
+                                <button type="submit">Search</button>
+                            </div>
+                            <div class="account">
+                                <a href=""
+                                    ><i class="fa-solid fa-circle-user"></i
+                                ></a>
+                            </div>
+                            <div class="cart">
+                                <a href="cart.html"
+                                    ><img
+                                        src="c.jpg"
+                                        width="30px"
+                                        height="30px"
+                                /></a>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
             </div>
-        </div>
-    </header> 
-      <section class="hero">
-        <div class="hero-content">
-          <h1>Biggest Sale of the Year!</h1>
-          <p>Up to 70% off on all products</p>
-          <a href="#products" class="cta-button">Shop Now</a>
-        </div>
-      </section>
-    <section class="products" id="products">
-      <div class="container">
-        <h2>Latest Products</h2>
-        <div class="product-grid" id="productGrid">
-          <div class="product-card">
-            <img src="s.png" alt="Product 1" />
-            <h3>Product 1</h3>
-            <div class="price">$29.99</div>
-            <a href="#" class="btn">Add to Cart</a>
-          </div>
-        
-        </div>
-      </div>
-      <div id="loadingMessage">Loading products...</div>
-      <div id="errorMessage" style="display:none; color:red;"></div>
-      <div class="product-grid" id="productGrid"></div>
+        </header>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Biggest Sale of the Year!</h1>
+                <p>Up to 70% off on all products at a limited time</p>
+                <a href="#products" class="cta-button">Shop Now</a>
+            </div>
+        </section>
+        <section class="products" id="products">
+            <div class="container">
+                <h2>Latest Products</h2>
+                <div class="product-grid" id="productGrid">
+                    <div class="product-card">
+                        <img src="s.png" alt="Product 1" />
+                        <h3>Product 1</h3>
+                        <div class="price">$29.99</div>
+                        <a href="#" class="btn">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div id="loadingMessage">Loading products...</div>
+            <div id="errorMessage" style="display: none; color: red"></div>
+            <div class="product-grid" id="productGrid"></div>
+        </section>
 
-    </section>
-
-    <script src="scripts/app.js"></script>
-</body>
+        <script src="scripts/app.js"></script>
+    </body>
 </html>
