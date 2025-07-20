@@ -49,7 +49,40 @@
     </header> 
     <main class="product-detail">
         <div id="product-details" class="container">Loading product...</div>
+
+          
+            <div class="image-zoom-wrapper">
+              <img id="productImage" src="" alt="Product" />
+            </div>
+
+            <div class="details">
+              <h1 id="productTitle"></h1>
+              <p id="productDescription"></p>
+              <div class="variation">
+                <label for="size">Size:</label>
+                <select id="size">
+                  <option value="S">Small</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Large</option>
+                </select>
+              </div>
+
+              <div class="quantity">
+                <button id="decrease">−</button>
+                <input type="number" id="qty" value="1" readonly />
+                <button id="increase">+</button>
+              </div>
+
+              <div class="price">Price: $<span id="productPrice">0.00</span></div>
+              <div class="total">Total: $<span id="totalPrice">0.00</span></div>
+
+              <button id="addToCart">Add to Cart</button>
+              <div id="feedback" class="hidden">✅ Added to Cart!</div>
+            </div>
+          </main>
+
       </main>
+    
      <script src="products.js"></script>
     </body>
     </html>

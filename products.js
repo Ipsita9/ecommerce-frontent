@@ -51,3 +51,74 @@ function updateCartCount() {
 
 // Call on page load
 updateCartCount();
+// Extract product ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
+
+// DOM Elements
+const productImage = document.getElementById("productImage");
+const productTitle = document.getElementById("productTitle");
+const productDescription = document.getElementById("productDescription");
+const productPrice = document.getElementById("productPrice");
+const totalPrice = document.getElementById("totalPrice");
+const qtyInput = document.getElementById("qty");
+const increaseBtn = document.getElementById("increase");
+const decreaseBtn = document.getElementById("decrease");
+const addToCartBtn = document.getElementById("addToCart");
+const feedback = document.getElementById("feedback");
+const cartCount = document.getElementById("cartCount");
+
+// Fetch product data
+fetch(`https://fakestoreapi.com/products/${productId}`)
+  .then(res => res.json())
+  .then(product => {
+    productImage.src = product.image;
+    productTitle.textContent = product.title;
+    productDescription.textContent = product.description;
+    productPrice.textContent = product.price.toFixed(2);
+    totalPrice.textContent = product.price.toFixed(2);
+
+    // Add quantity control
+    increaseBtn.onclick = () => updateQty(1, product.price);
+    decreaseBtn.onclick = () => updateQty(-1, product.price);
+
+    // Add to cart
+    addToCartBtn.onclick = () => {
+      const size = document.getElementById("size").value;
+      const quantity = parseInt(qtyInput.value);
+      const cartItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        size: size,
+        quantity: quantity,
+      };
+
+      // Save to localStorage
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(cartItem);
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      feedback.classList.remove("hidden");
+      setTimeout(() => feedback.classList.add("hidden"), 2000);
+
+      // Update cart count
+      cartCount.textContent = cart.length;
+    };
+  });
+
+function updateQty(change, price) {
+  let qty = parseInt(qtyInput.value);
+  qty += change;
+  if (qty < 1) qty = 1;
+  qtyInput.value = qty;
+  totalPrice.textContent = (qty * price).toFixed(2);
+}
+
+// Load cart count on page load
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cartCount.textContent = cart.length;
+});
+
