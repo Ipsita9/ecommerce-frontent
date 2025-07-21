@@ -52,73 +52,135 @@ function updateCartCount() {
 // Call on page load
 updateCartCount();
 // Extract product ID from URL
-const urlParams = new URLSearchParams(window.location.search);
-const productId = urlParams.get('id');
+// const urlParams = new URLSearchParams(window.location.search);
+// const productId = urlParams.get('id');
 
-// DOM Elements
-const productImage = document.getElementById("productImage");
-const productTitle = document.getElementById("productTitle");
-const productDescription = document.getElementById("productDescription");
-const productPrice = document.getElementById("productPrice");
-const totalPrice = document.getElementById("totalPrice");
-const qtyInput = document.getElementById("qty");
-const increaseBtn = document.getElementById("increase");
-const decreaseBtn = document.getElementById("decrease");
-const addToCartBtn = document.getElementById("addToCart");
-const feedback = document.getElementById("feedback");
-const cartCount = document.getElementById("cartCount");
+// // DOM Elements
+// const productImage = document.getElementById("productImage");
+// const productTitle = document.getElementById("productTitle");
+// const productDescription = document.getElementById("productDescription");
+// const productPrice = document.getElementById("productPrice");
+// const totalPrice = document.getElementById("totalPrice");
+// const qtyInput = document.getElementById("qty");
+// const increaseBtn = document.getElementById("increase");
+// const decreaseBtn = document.getElementById("decrease");
+// const addToCartBtn = document.getElementById("addToCart");
+// const feedback = document.getElementById("feedback");
+// const cartCount = document.getElementById("cartCount");
 
-// Fetch product data
-fetch(`https://fakestoreapi.com/products/${productId}`)
-  .then(res => res.json())
-  .then(product => {
-    productImage.src = product.image;
-    productTitle.textContent = product.title;
-    productDescription.textContent = product.description;
-    productPrice.textContent = product.price.toFixed(2);
-    totalPrice.textContent = product.price.toFixed(2);
+// // Fetch product data
+// fetch(`https://fakestoreapi.com/products/${productId}`)
+//   .then(res => res.json())
+//   .then(product => {
+//     productImage.src = product.image;
+//     productTitle.textContent = product.title;
+//     productDescription.textContent = product.description;
+//     productPrice.textContent = product.price.toFixed(2);
+//     totalPrice.textContent = product.price.toFixed(2);
 
-    // Add quantity control
-    increaseBtn.onclick = () => updateQty(1, product.price);
-    decreaseBtn.onclick = () => updateQty(-1, product.price);
+//     // Add quantity control
+//     increaseBtn.onclick = () => updateQty(1, product.price);
+//     decreaseBtn.onclick = () => updateQty(-1, product.price);
 
-    // Add to cart
-    addToCartBtn.onclick = () => {
-      const size = document.getElementById("size").value;
-      const quantity = parseInt(qtyInput.value);
-      const cartItem = {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        size: size,
-        quantity: quantity,
-      };
+//     // Add to cart
+//     addToCartBtn.onclick = () => {
+//       const size = document.getElementById("size").value;
+//       const quantity = parseInt(qtyInput.value);
+//       const cartItem = {
+//         id: product.id,
+//         title: product.title,
+//         price: product.price,
+//         image: product.image,
+//         size: size,
+//         quantity: quantity,
+//       };
 
-      // Save to localStorage
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push(cartItem);
-      localStorage.setItem("cart", JSON.stringify(cart));
+//       // Save to localStorage
+//       let cart = JSON.parse(localStorage.getItem("cart")) || [];
+//       cart.push(cartItem);
+//       localStorage.setItem("cart", JSON.stringify(cart));
 
-      feedback.classList.remove("hidden");
-      setTimeout(() => feedback.classList.add("hidden"), 2000);
+//       feedback.classList.remove("hidden");
+//       setTimeout(() => feedback.classList.add("hidden"), 2000);
 
-      // Update cart count
-      cartCount.textContent = cart.length;
-    };
-  });
+//       // Update cart count
+//       cartCount.textContent = cart.length;
+//     };
+//   });
 
-function updateQty(change, price) {
-  let qty = parseInt(qtyInput.value);
-  qty += change;
-  if (qty < 1) qty = 1;
-  qtyInput.value = qty;
-  totalPrice.textContent = (qty * price).toFixed(2);
+// function updateQty(change, price) {
+//   let qty = parseInt(qtyInput.value);
+//   qty += change;
+//   if (qty < 1) qty = 1;
+//   qtyInput.value = qty;
+//   totalPrice.textContent = (qty * price).toFixed(2);
+// }
+
+// // Load cart count on page load
+// document.addEventListener("DOMContentLoaded", () => {
+//   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//   cartCount.textContent = cart.length;
+// });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
+
+  if (!productId) {
+    alert("No product ID found in URL");
+    return;
+  }
+
+  fetch("https://fakestoreapi.com/products/" + productId)
+    .then((res) => res.json())
+    .then((product) => {
+      // Update UI elements
+      document.getElementById("product-image").src = product.image;
+      document.getElementById("product-title").textContent = product.title;
+      document.getElementById("product-description").textContent = product.description;
+      document.getElementById("product-price").textContent = "$" + product.price.toFixed(2);
+
+      // Set default total price
+      updateTotal(product.price);
+    });
+});
+
+function updateTotal(price) {
+  const qty = parseInt(document.getElementById("quantity-input").value);
+  const total = qty * price;
+  document.getElementById("product-total").textContent = "Total: $" + total.toFixed(2);
 }
 
-// Load cart count on page load
-document.addEventListener("DOMContentLoaded", () => {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cartCount.textContent = cart.length;
-});
+function increaseQty() {
+  const input = document.getElementById("quantity-input");
+  let qty = parseInt(input.value);
+  input.value = ++qty;
+  updateTotal(parseFloat(document.getElementById("product-price").textContent.slice(1)));
+}
+
+function decreaseQty() {
+  const input = document.getElementById("quantity-input");
+  let qty = parseInt(input.value);
+  if (qty > 1) input.value = --qty;
+  updateTotal(parseFloat(document.getElementById("product-price").textContent.slice(1)));
+}
+<button onclick="addToCart()">Add to Cart</button>
+<p id="cart-feedback" style="color: green;"></p>
+
+<script>
+  function addToCart() {
+    const productId = new URLSearchParams(window.location.search).get("id");
+    const qty = parseInt(document.getElementById("quantity-input").value);
+    const size = document.getElementById("size").value;
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.push({
+      id: productId,
+      quantity: qty,
+      size: size,
+    });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    document.getElementById("cart-feedback").textContent = "Added to cart!";
 
