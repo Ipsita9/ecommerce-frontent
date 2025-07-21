@@ -1,4 +1,3 @@
-
 // Products listing page - shows all products
 const productDetail = document.getElementById("product-details");
 
@@ -178,13 +177,21 @@ function addToCart() {
   });
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  
+
   // Show feedback message if element exists
   const feedbackElement = document.getElementById("cart-feedback");
   if (feedbackElement) {
     feedbackElement.textContent = "Added to cart!";
   }
-  
+
   updateCartCount();
 }
 
+// Update cart count function
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartElement = document.querySelector(".cart span");
+  if (cartElement) {
+    cartElement.textContent = cart.length;
+  }
+}
