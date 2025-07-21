@@ -164,23 +164,27 @@ function decreaseQty() {
   if (qty > 1) input.value = --qty;
   updateTotal(parseFloat(document.getElementById("product-price").textContent.slice(1)));
 }
-<button onclick="addToCart()">Add to Cart</button>
-<p id="cart-feedback" style="color: green;"></p>
+function addToCart() {
+  const productId = new URLSearchParams(window.location.search).get("id");
+  const qty = parseInt(document.getElementById("quantity-input").value) || 1;
+  const size = document.getElementById("size").value;
 
-<script>
-  function addToCart() {
-    const productId = new URLSearchParams(window.location.search).get("id");
-    const qty = parseInt(document.getElementById("quantity-input").value);
-    const size = document.getElementById("size").value;
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({
+    id: productId,
+    quantity: qty,
+    size: size,
+  });
 
-    cart.push({
-      id: productId,
-      quantity: qty,
-      size: size,
-    });
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    document.getElementById("cart-feedback").textContent = "Added to cart!";
+  localStorage.setItem("cart", JSON.stringify(cart));
+  
+  // Show feedback message if element exists
+  const feedbackElement = document.getElementById("cart-feedback");
+  if (feedbackElement) {
+    feedbackElement.textContent = "Added to cart!";
+  }
+  
+  updateCartCount();
+}
 
