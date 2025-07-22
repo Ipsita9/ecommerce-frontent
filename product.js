@@ -151,7 +151,9 @@ function renderProduct(product) {
       
       // Use CartUtils to add item with duplicate checking
       const result = CartUtils.addToCart(newItem);
-      CartUtils.saveCart(CartUtils.getCart());
+      // CartUtils.saveCart(CartUtils.getCart());
+       updateCartCount();
+      
       
       document.getElementById("feedback").textContent = `✅ ${result.message}`;
       updateCartCount();
@@ -183,3 +185,16 @@ function renderProduct(product) {
       renderProduct(product);
     }
   });
+// ✅ Show feedback after adding to cart
+function showCartFeedback(message = "Item added to cart!") {
+  const feedback = document.getElementById("feedback");
+  if (feedback) {
+    feedback.textContent = message;
+    feedback.classList.add("show");
+
+    // Auto hide after 2 seconds
+    setTimeout(() => {
+      feedback.classList.remove("show");
+    }, 2000);
+  }
+}
