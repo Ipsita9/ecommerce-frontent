@@ -12,6 +12,43 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
+        <style>
+        body {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+        }
+        header, footer {
+          padding: 10px 0;
+          background: #f4f4f4;
+          text-align: center;
+        }
+        .product-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 30px;
+          margin-top: 30px;
+        }
+        .product-image img {
+          max-width: 300px;
+          width: 100%;
+          border: 1px solid #ccc;
+          padding: 10px;
+          background: #fff;
+        }
+        .product-info {
+          flex: 1;
+          min-width: 250px;
+        }
+        .quantity {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .quantity button {
+          padding: 5px 10px;
+          font-size: 18px;
+        }
+        </style>
     </head>
 
     <body>
@@ -19,12 +56,7 @@
             <div class="container">
                 <div class="navbar">
                     <div class="logo">
-                        <img
-                            src="logo2.png"
-                            width="50px"
-                            onerror="this.src='placeholder.png'"
-                            alt="Logo"
-                        />
+                        <img src="logo2.png" width="50px" onerror="this.src='placeholder.png'" alt="Logo" />
                     </div>
                     <div class="hamburger" onclick="toggleMenu()">
                         <span></span>
@@ -67,16 +99,16 @@
                 </div>
             </div>
         </header>
-        <!-- Product List Section -->
-        <section class="products-section container">
-            <h2>All Products</h2>
-            <div id="product-grid" class="product-grid"></div>
-        </section>
+         <section class="product-detail container">
+            <div id="product-image-wrapper"></div>
+            <div id="product-info"></div>
+          </section>
 
-        <!-- Footer -->
-        <footer>
+          <!-- Footer -->
+          <footer>
             <p>&copy; 2025 My Shop</p>
-        </footer>
-        <script src="products.js"></script>
-    </body>
-</html>
+          </footer>
+
+          <script src="product.js"></script>
+        </body>
+        </html>

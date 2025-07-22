@@ -482,3 +482,12 @@ body {
   }
 }
 
+/* styles.css */
+.product-image-zoom img {
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+
+.product-image-zoom img:hover {
+  transform: scale(1.5);
+}
