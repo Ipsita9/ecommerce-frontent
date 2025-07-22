@@ -150,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
           
           // Use CartUtils to add item with duplicate checking
           const result = CartUtils.addToCart(newItem);
-          CartUtils.saveCart(CartUtils.getCart());
           
           alert(result.message);
           updateCartCount();

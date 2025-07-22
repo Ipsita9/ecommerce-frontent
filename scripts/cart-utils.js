@@ -22,6 +22,7 @@ const CartUtils = {
     if (existingIndex !== -1) {
       // Update quantity for existing item
       cart[existingIndex].quantity += item.quantity || 1;
+      this.saveCart(cart); // Save immediately
       return { success: true, message: "Quantity updated in cart!", isUpdate: true };
     } else {
       // Add new item
@@ -29,6 +30,7 @@ const CartUtils = {
         ...item,
         uniqueId: item.uniqueId || `${item.id}-${item.size || 'default'}`
       });
+      this.saveCart(cart); // Save immediately
       return { success: true, message: "Added to cart!", isUpdate: false };
     }
   },
