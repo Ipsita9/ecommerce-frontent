@@ -134,33 +134,26 @@ function renderProduct(product) {
       }
     };
 
-    // Add to cart with duplicate check
+    // Add to cart with duplicate check using CartUtils
     document.getElementById("add-to-cart").addEventListener("click", () => {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const size = document.getElementById("size").value;
-
-      const uniqueId = `${product.id}-${size}`; // handle variations
-      const existingIndex = cart.findIndex(item => item.id === uniqueId || item.uniqueId === uniqueId);
-
-      if (existingIndex !== -1) {
-        // Update quantity if same item exists
-        cart[existingIndex].quantity += quantity;
-        document.getElementById("feedback").textContent = "✅ Quantity updated in cart!";
-      } else {
-        // Add new item
-        cart.push({
-          id: product.id,
-          uniqueId: uniqueId,
-          title: product.title,
-          price: parseFloat((product.price * 80).toFixed(2)),  // converted to INR
-          image: product.image,
-          size,
-          quantity,
-        });
-        document.getElementById("feedback").textContent = "✅ Added to cart!";
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
+      const uniqueId = `${product.id}-${size}`;
+      
+      const newItem = {
+        id: product.id,
+        uniqueId: uniqueId,
+        title: product.title,
+        price: parseFloat((product.price * 80).toFixed(2)),  // converted to INR
+        image: product.image,
+        size,
+        quantity,
+      };
+      
+      // Use CartUtils to add item with duplicate checking
+      const result = CartUtils.addToCart(newItem);
+      CartUtils.saveCart(CartUtils.getCart());
+      
+      document.getElementById("feedback").textContent = `✅ ${result.message}`;
       updateCartCount();
       document.getElementById("feedback").style.display = "block";
       

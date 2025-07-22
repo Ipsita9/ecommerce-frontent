@@ -11,8 +11,7 @@ window.toggleMenu = toggleMenu;
 
 // Update cart count function
 function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const totalItems = CartUtils.getTotalCount();
   const cartIcon = document.querySelector(".cart span");
   if (cartIcon) {
     cartIcon.textContent = totalItems;
@@ -136,35 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
           const productPrice = parseFloat(productCard.querySelector(".price").textContent.replace("$", ""));
           const productImage = productCard.querySelector("img").src;
           
-          const cart = JSON.parse(localStorage.getItem("cart")) || [];
           const productId = `homepage-${index}`;
           const uniqueId = `${productId}-M`; // Default size M for homepage products
           
-          // Check if item already exists
-          const existingIndex = cart.findIndex(item => 
-            item.uniqueId === uniqueId || 
-            (item.title === productTitle && item.size === "M")
-          );
-
-          if (existingIndex !== -1) {
-            // Update quantity if same item exists
-            cart[existingIndex].quantity += 1;
-            alert("Quantity updated in cart!");
-          } else {
-            // Add new item
-            cart.push({
-              id: productId,
-              uniqueId: uniqueId,
-              title: productTitle,
-              price: productPrice,
-              image: productImage,
-              size: "M", // Default size
-              quantity: 1
-            });
-            alert("Added to cart!");
-          }
+          const newItem = {
+            id: productId,
+            uniqueId: uniqueId,
+            title: productTitle,
+            price: productPrice,
+            image: productImage,
+            size: "M", // Default size
+            quantity: 1
+          };
           
-          localStorage.setItem("cart", JSON.stringify(cart));
+          // Use CartUtils to add item with duplicate checking
+          const result = CartUtils.addToCart(newItem);
+          CartUtils.saveCart(CartUtils.getCart());
+          
+          alert(result.message);
           updateCartCount();
         });
       });
