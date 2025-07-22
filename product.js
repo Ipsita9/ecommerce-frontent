@@ -14,33 +14,35 @@ async function fetchProduct(id) {
 // Render product detail with size, quantity, price, and cart button
 function renderProduct(product) {
   const imageHTML = `
-    <div class="product-image">
+    <div class="image-zoom-wrapper">
       <img src="${product.image}" alt="${product.title}" />
     </div>
   `;
 
   const infoHTML = `
-    <h2>${product.title}</h2>
-    <p>${product.description}</p>
-    <p>Price: ₹<span id="unit-price">${(product.price * 80).toFixed(2)}</span></p>
+    <div class="details">
+      <h2>${product.title}</h2>
+      <p>${product.description}</p>
+      <p class="price">Price: ₹<span id="unit-price">${(product.price * 80).toFixed(2)}</span></p>
 
-    <label for="size">Size:</label>
-    <select id="size">
-      <option value="S">S</option>
-      <option value="M" selected>M</option>
-      <option value="L">L</option>
-    </select>
+      <label for="size">Size:</label>
+      <select id="size">
+        <option value="S">S</option>
+        <option value="M" selected>M</option>
+        <option value="L">L</option>
+      </select>
 
-    <div class="quantity" style="margin: 10px 0;">
-      <button id="decrease">−</button>
-      <span id="quantity">1</span>
-      <button id="increase">+</button>
+      <div class="quantity" style="margin: 10px 0;">
+        <button id="decrease">−</button>
+        <span id="quantity">1</span>
+        <button id="increase">+</button>
+      </div>
+
+      <p class="total">Total: ₹<span id="total-price">${(product.price * 80).toFixed(2)}</span></p>
+
+      <button id="add-to-cart">Add to Cart</button>
+      <p id="feedback" style="display:none;color:green;">✅ Added to cart!</p>
     </div>
-
-    <p>Total: ₹<span id="total-price">${(product.price * 80).toFixed(2)}</span></p>
-
-    <button id="add-to-cart">Add to Cart</button>
-    <p id="feedback" style="display:none;color:green;">✅ Added to cart!</p>
   `;
 
   // Insert content into page
