@@ -63,8 +63,11 @@ function removeItem(index) {
 }
 
 function updateCartCount() {
-  const cart = CartUtils.getCart();
-  document.getElementById("cart-count").textContent = cart.length;
+  const totalItems = CartUtils.getTotalCount();
+  const cartSpan = document.querySelector(".cart span");
+  if (cartSpan) {
+    cartSpan.textContent = totalItems;
+  }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
