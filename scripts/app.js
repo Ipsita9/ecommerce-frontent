@@ -6,6 +6,9 @@ function toggleMenu() {
   nav.classList.toggle("show");
 }
 
+// Make toggleMenu available globally
+window.toggleMenu = toggleMenu;
+
 // const productGrid = document.getElementById("productGrid");
 
 // // Fetch data from FakeStoreAPI
