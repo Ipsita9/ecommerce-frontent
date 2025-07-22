@@ -48,6 +48,99 @@
           padding: 5px 10px;
           font-size: 18px;
         }
+            
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #fff;
+              }
+
+              header, footer {
+                padding: 10px 0;
+                background: #f4f4f4;
+                text-align: center;
+              }
+
+              .product-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 40px;
+                justify-content: center;
+                align-items: flex-start;
+                margin-top: 30px;
+              }
+
+              .product-image img {
+                max-width: 350px;
+                width: 100%;
+                border: 1px solid #ccc;
+                padding: 10px;
+                background: #fff;
+              }
+
+              .product-info {
+                flex: 1;
+                max-width: 600px;
+              }
+
+              .product-info h2 {
+                margin-top: 0;
+                font-size: 24px;
+              }
+
+              .product-info p {
+                font-size: 16px;
+                line-height: 1.6;
+              }
+
+              .price {
+                font-weight: bold;
+                font-size: 18px;
+                margin: 10px 0;
+              }
+
+              .quantity, .size-select {
+                margin: 10px 0;
+              }
+
+              .quantity button {
+                padding: 5px 10px;
+                font-size: 16px;
+                cursor: pointer;
+              }
+
+              .total {
+                margin: 15px 0;
+                font-weight: bold;
+              }
+
+              button#add-to-cart {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 4px;
+              }
+
+              @media (max-width: 768px) {
+                .product-container {
+                  flex-direction: column;
+                  align-items: center;
+                }
+
+                .product-image img {
+                  max-width: 100%;
+                }
+
+                .product-info {
+                  max-width: 100%;
+                }
+              }
+            
+
         </style>
     </head>
 
