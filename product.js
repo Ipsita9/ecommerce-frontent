@@ -96,7 +96,7 @@ function renderProduct(product) {
 // Update cart icon count
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartCountElement = document.querySelector(".cart-count");
+  const cartCountElement = document.querySelector(".cart span");
   if (cartCountElement) {
     cartCountElement.textContent = cart.length;
   }
