@@ -9,6 +9,21 @@ function toggleMenu() {
 // Make toggleMenu available globally
 window.toggleMenu = toggleMenu;
 
+// Update cart count function
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const cartIcon = document.querySelector(".cart span");
+  if (cartIcon) {
+    cartIcon.textContent = totalItems;
+  }
+}
+
+// Initialize cart count on page load
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartCount();
+});
+
 // const productGrid = document.getElementById("productGrid");
 
 // // Fetch data from FakeStoreAPI
@@ -112,6 +127,16 @@ window.toggleMenu = toggleMenu;
       // Add-to-cart click event
       document.querySelectorAll(".add-to-cart").forEach((button) => {
         button.addEventListener("click", () => {
+          // Simple cart functionality for homepage
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          cart.push({
+            id: `simple-${Date.now()}`,
+            title: "Product",
+            price: 0,
+            quantity: 1
+          });
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
           alert("Added to cart!");
         });
       });

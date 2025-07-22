@@ -167,7 +167,7 @@ function renderProduct(product) {
   // Update total cart quantity
   function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const cartIcon = document.querySelector(".cart span");
     if (cartIcon) {
       cartIcon.textContent = totalItems;
