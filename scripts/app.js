@@ -21,6 +21,10 @@ function updateCartCount() {
 
 // Initialize cart count on page load
 document.addEventListener("DOMContentLoaded", () => {
+  // Clean up any existing duplicates
+  if (window.CartUtils) {
+    CartUtils.removeDuplicates();
+  }
   updateCartCount();
 });
 
@@ -125,19 +129,43 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Add-to-cart click event
-      document.querySelectorAll(".add-to-cart").forEach((button) => {
-        button.addEventListener("click", () => {
-          // Simple cart functionality for homepage
+      document.querySelectorAll(".add-to-cart").forEach((button, index) => {
+        button.addEventListener("click", (e) => {
+          const productCard = e.target.closest(".product-card");
+          const productTitle = productCard.querySelector("h3").textContent;
+          const productPrice = parseFloat(productCard.querySelector(".price").textContent.replace("$", ""));
+          const productImage = productCard.querySelector("img").src;
+          
           const cart = JSON.parse(localStorage.getItem("cart")) || [];
-          cart.push({
-            id: `simple-${Date.now()}`,
-            title: "Product",
-            price: 0,
-            quantity: 1
-          });
+          const productId = `homepage-${index}`;
+          const uniqueId = `${productId}-M`; // Default size M for homepage products
+          
+          // Check if item already exists
+          const existingIndex = cart.findIndex(item => 
+            item.uniqueId === uniqueId || 
+            (item.title === productTitle && item.size === "M")
+          );
+
+          if (existingIndex !== -1) {
+            // Update quantity if same item exists
+            cart[existingIndex].quantity += 1;
+            alert("Quantity updated in cart!");
+          } else {
+            // Add new item
+            cart.push({
+              id: productId,
+              uniqueId: uniqueId,
+              title: productTitle,
+              price: productPrice,
+              image: productImage,
+              size: "M", // Default size
+              quantity: 1
+            });
+            alert("Added to cart!");
+          }
+          
           localStorage.setItem("cart", JSON.stringify(cart));
           updateCartCount();
-          alert("Added to cart!");
         });
       });
     })

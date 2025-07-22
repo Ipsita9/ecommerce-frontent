@@ -34,9 +34,10 @@ function renderProducts(products) {
 // Update cart count in nav
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const cartSpan = document.querySelector(".cart span");
   if (cartSpan) {
-    cartSpan.textContent = cart.length;
+    cartSpan.textContent = totalItems;
   }
 }
 

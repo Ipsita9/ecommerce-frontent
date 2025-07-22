@@ -140,27 +140,34 @@ function renderProduct(product) {
       const size = document.getElementById("size").value;
 
       const uniqueId = `${product.id}-${size}`; // handle variations
-      const existingIndex = cart.findIndex(item => item.id === uniqueId);
+      const existingIndex = cart.findIndex(item => item.id === uniqueId || item.uniqueId === uniqueId);
 
       if (existingIndex !== -1) {
-        // Merge quantity if same item exists
+        // Update quantity if same item exists
         cart[existingIndex].quantity += quantity;
+        document.getElementById("feedback").textContent = "✅ Quantity updated in cart!";
       } else {
         // Add new item
-        // 
         cart.push({
-          id: uniqueId,
+          id: product.id,
+          uniqueId: uniqueId,
           title: product.title,
-          price: parseFloat((product.price * 80).toFixed(2)),  // ✅ converted to INR
+          price: parseFloat((product.price * 80).toFixed(2)),  // converted to INR
           image: product.image,
           size,
           quantity,
         });
+        document.getElementById("feedback").textContent = "✅ Added to cart!";
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCartCount();
       document.getElementById("feedback").style.display = "block";
+      
+      // Hide feedback after 3 seconds
+      setTimeout(() => {
+        document.getElementById("feedback").style.display = "none";
+      }, 3000);
     });
   }
 
