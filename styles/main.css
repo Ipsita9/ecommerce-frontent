@@ -50,12 +50,12 @@ body {
 
 .nav a {
     text-decoration: none;
-    color: black;
+    color: #eee2e2;
     font-weight: bold;
 }
 
 .nav a:hover {
-    color: #333;
+    color: #1c1717;
 }
 
 .search-bar {
