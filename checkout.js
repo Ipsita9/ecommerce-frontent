@@ -156,6 +156,15 @@ function validateAllForms() {
         if (!firstInvalidField) firstInvalidField = email;
     }
 
+    // Validate phone number format
+    const phone = document.getElementById("phone");
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/; // International format or 10+ digits
+    if (phone.value && !phoneRegex.test(phone.value.replace(/[\s\-\(\)]/g, ""))) {
+        phone.style.borderColor = "#ff4444";
+        isValid = false;
+        if (!firstInvalidField) firstInvalidField = phone;
+    }
+
     // Validate card number if credit card is selected
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
     if (paymentMethod === "credit-card") {
