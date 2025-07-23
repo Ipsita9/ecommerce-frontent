@@ -117,7 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
         card.classList.add("product-card");
 
         card.innerHTML = `
-          <img src="${product.image}" alt="${product.title}" loading="lazy">
+          <picture>
+            <source media="(max-width: 480px)" srcset="${product.image}?w=150&h=150&fit=crop&auto=format,webp" type="image/webp">
+            <source media="(max-width: 768px)" srcset="${product.image}?w=250&h=250&fit=crop&auto=format,webp" type="image/webp">
+            <source srcset="${product.image}?w=300&h=300&fit=crop&auto=format,webp" type="image/webp">
+            <img src="${product.image}" alt="${product.title}" loading="lazy" 
+                 srcset="${product.image}?w=150 150w, ${product.image}?w=250 250w, ${product.image}?w=300 300w"
+                 sizes="(max-width: 480px) 150px, (max-width: 768px) 250px, 300px">
+          </picture>
           <h3>${product.title}</h3>
           <p class="description">${product.description.substring(0, 100)}...</p>
           <div class="price">$${product.price.toFixed(2)}</div>

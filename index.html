@@ -10,6 +10,16 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>E-Commerce Frontend</title>
+        
+        <!-- Performance optimization -->
+        <link rel="preload" href="styles/main.css" as="style">
+        <link rel="preload" href="scripts/app.js" as="script">
+        <link rel="preconnect" href="https://fakestoreapi.com">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+        
+        <!-- DNS prefetch for external resources -->
+        <link rel="dns-prefetch" href="//fakestoreapi.com">
+        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
         <link rel="stylesheet" href="styles/main.css" />
         <link
             rel="stylesheet"
@@ -25,7 +35,10 @@
             <div class="container">
                 <div class="navbar">
                     <div class="logo">
-                        <img src="logo2.png" width="50px" onerror="this.src='placeholder.png'" alt="Logo" />
+                        <picture>
+                            <source srcset="logo2.webp" type="image/webp">
+                            <img src="logo2.png" width="50px" height="50px" alt="Logo" loading="lazy" onerror="this.src='placeholder.png'">
+                        </picture>
                     </div>
                     <div class="hamburger" onclick="toggleMenu()">
                         <span></span>
@@ -53,14 +66,12 @@
                                 ></a>
                             </div>
                             <div class="cart">
-                                <a href="cart.html"
-                                    ><img
-                                        src="c.jpg"
-                                        width="30px"
-                                        height="30px"
-                                        onerror="this.src='placeholder.png'"
-                                        alt="Cart"
-                                /></a>
+                                <a href="cart.html">
+                                    <picture>
+                                        <source srcset="c.webp" type="image/webp">
+                                        <img src="c.jpg" width="30" height="30" alt="Cart" loading="lazy" onerror="this.src='placeholder.png'">
+                                    </picture>
+                                </a>
                                 <span>0</span>
                             </div>
                         </div>
@@ -86,6 +97,9 @@
         </section>
 
         <script src="scripts/cart-utils.js"></script>
+        <script src="scripts/lazy-loading.js"></script>
+        <script src="scripts/performance-monitor.js"></script>
+        <script src="scripts/image-optimizer.js"></script>
         <script src="scripts/app.js"></script>
         <script type="module" src="firebase-config.js"></script>
     </body>

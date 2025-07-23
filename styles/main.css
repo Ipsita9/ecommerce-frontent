@@ -2,11 +2,13 @@
     margin: 0px;
     padding: 0px;
 }
+/* Use system fonts for better performance */
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
     text-align: center;
+    font-display: swap; /* Improve font loading performance */
 }
 
 /* .container {
@@ -293,11 +295,34 @@ body {
   transform: translateY(-5px);
 }
 
-.product-card img {
+/* Optimized image styles with lazy loading */
+.product-card img,
+.product-card picture {
   width: 100%;
   height: 200px;
-  object-fit: contain;
   margin-bottom: 15px;
+}
+
+.product-card img {
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+/* Lazy loading styles */
+img[data-src],
+source[data-srcset] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img.lazy-loaded {
+  opacity: 1;
+}
+
+/* Optimize image rendering */
+img {
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .product-card h3 {
