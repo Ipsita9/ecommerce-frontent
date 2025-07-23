@@ -1,0 +1,227 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Checkout - E-Commerce Frontend</title>
+        <link rel="stylesheet" href="styles/main.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
+
+    <body>
+        <header>
+            <div class="container">
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="logo2.png" width="50px" onerror="this.src='placeholder.png'" alt="Logo" />
+                    </div>
+                    <div class="hamburger" onclick="toggleMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="nav" id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Product</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                        <div class="right-nav">
+                            <div class="search-bar">
+                                <input
+                                    type="text"
+                                    placeholder="search for products"
+                                />
+                                <button type="submit">Search</button>
+                            </div>
+                            <div class="account">
+                                <a href=""
+                                    ><i class="fa-solid fa-circle-user"></i
+                                ></a>
+                            </div>
+                            <div class="cart">
+                                <a href="cart.html"
+                                    ><img
+                                        src="c.jpg"
+                                        width="30px"
+                                        height="30px"
+                                        onerror="this.src='placeholder.png'"
+                                        alt="Cart"
+                                /></a>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main class="checkout-container">
+            <h1>Checkout</h1>
+            
+            <div class="checkout-layout">
+                <!-- Left Column: Forms -->
+                <div class="checkout-forms">
+                    <!-- Customer Information -->
+                    <section class="checkout-section">
+                        <h2><i class="fa-solid fa-user"></i> Customer Information</h2>
+                        <form id="customer-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required />
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Shipping Address -->
+                    <section class="checkout-section">
+                        <h2><i class="fa-solid fa-truck"></i> Shipping Address</h2>
+                        <form id="shipping-form">
+                            <div class="form-group">
+                                <label for="address">Street Address *</label>
+                                <input type="text" id="address" name="address" required />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State *</label>
+                                    <input type="text" id="state" name="state" required />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="zipCode">ZIP Code *</label>
+                                    <input type="text" id="zipCode" name="zipCode" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country *</label>
+                                    <select id="country" name="country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="IN">India</option>
+                                        <option value="US">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="CA">Canada</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Payment Method -->
+                    <section class="checkout-section">
+                        <h2><i class="fa-solid fa-credit-card"></i> Payment Method</h2>
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="credit-card" name="payment" value="credit-card" checked />
+                                <label for="credit-card">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                    Credit/Debit Card
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="paypal" name="payment" value="paypal" />
+                                <label for="paypal">
+                                    <i class="fa-brands fa-paypal"></i>
+                                    PayPal
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="cash-on-delivery" name="payment" value="cod" />
+                                <label for="cash-on-delivery">
+                                    <i class="fa-solid fa-money-bill"></i>
+                                    Cash on Delivery
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Credit Card Details -->
+                        <div id="card-details" class="card-details">
+                            <div class="form-group">
+                                <label for="cardNumber">Card Number *</label>
+                                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date *</label>
+                                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV *</label>
+                                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardName">Name on Card *</label>
+                                <input type="text" id="cardName" name="cardName" />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column: Order Summary -->
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div id="checkout-items" class="checkout-items"></div>
+                    
+                    <div class="summary-totals">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>$<span id="subtotal">0.00</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span>$<span id="shipping">5.99</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax:</span>
+                            <span>$<span id="tax">0.00</span></span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span>$<span id="final-total">0.00</span></span>
+                        </div>
+                    </div>
+
+                    <button id="place-order-btn" class="place-order-btn">
+                        <i class="fa-solid fa-lock"></i>
+                        Place Order
+                    </button>
+
+                    <div class="security-info">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Your payment information is secure and encrypted</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="scripts/cart-utils.js"></script>
+        <script src="scripts/app.js"></script>
+        <script src="checkout.js"></script>
+    </body>
+</html>

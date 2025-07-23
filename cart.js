@@ -88,7 +88,7 @@ function updateCartCount() {
 document.getElementById("checkout-btn").addEventListener("click", () => {
   const cart = CartUtils.getCart();
   if (cart.length > 0) {
-    alert("Checkout functionality coming soon!");
+    window.location.href = "checkout.html";
   }
 });
 
