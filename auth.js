@@ -1,6 +1,19 @@
 
-// Authentication functionality
-console.log("Authentication system loaded");
+// Firebase Authentication functionality
+import { auth } from './firebase-config.js';
+import { 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  updateProfile
+} from 'firebase/auth';
+
+console.log("Firebase Authentication system loaded");
+
+// Current user state
+let currentUser = null;
 
 // Form switching functions
 function switchToSignup() {
@@ -149,16 +162,164 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
-// Validate login form
+// Firebase error handling
+function handleFirebaseError(error) {
+    let message = 'An error occurred. Please try again.';
+    
+    switch (error.code) {
+        case 'auth/user-not-found':
+            message = 'No account found with this email address.';
+            break;
+        case 'auth/wrong-password':
+            message = 'Incorrect password. Please try again.';
+            break;
+        case 'auth/email-already-in-use':
+            message = 'An account with this email already exists.';
+            break;
+        case 'auth/weak-password':
+            message = 'Password should be at least 6 characters long.';
+            break;
+        case 'auth/invalid-email':
+            message = 'Please enter a valid email address.';
+            break;
+        case 'auth/too-many-requests':
+            message = 'Too many failed attempts. Please try again later.';
+            break;
+        case 'auth/network-request-failed':
+            message = 'Network error. Please check your connection.';
+            break;
+        default:
+            message = error.message;
+    }
+    
+    return message;
+}
+
+// Update UI based on authentication state
+function updateAuthUI(user) {
+    const accountLink = document.querySelector('.account a');
+    const cartIcon = document.querySelector('.cart span');
+    
+    if (user) {
+        // User is logged in
+        currentUser = user;
+        
+        // Update account icon/link
+        if (accountLink) {
+            accountLink.innerHTML = '<i class="fa-solid fa-user-check"></i>';
+            accountLink.title = `Logged in as ${user.email}`;
+        }
+        
+        // Update cart count
+        if (window.CartUtils && cartIcon) {
+            const totalItems = CartUtils.getTotalCount();
+            cartIcon.textContent = totalItems;
+        }
+        
+        // If on login page, redirect to home
+        if (window.location.pathname.includes('login.html')) {
+            window.location.href = 'index.html';
+        }
+    } else {
+        // User is logged out
+        currentUser = null;
+        
+        // Reset account icon
+        if (accountLink) {
+            accountLink.innerHTML = '<i class="fa-solid fa-circle-user"></i>';
+            accountLink.title = 'Login';
+        }
+        
+        // Clear any user-specific data
+        localStorage.removeItem('userPreferences');
+    }
+}
+
+// Firebase signup function
+async function signupWithFirebase(email, password, fullName) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Update user profile with display name
+        await updateProfile(user, {
+            displayName: fullName
+        });
+        
+        showNotification('Account created successfully! Welcome!', 'success');
+        return { success: true, user };
+    } catch (error) {
+        const errorMessage = handleFirebaseError(error);
+        showNotification(errorMessage, 'error');
+        return { success: false, error: errorMessage };
+    }
+}
+
+// Firebase login function
+async function loginWithFirebase(email, password) {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        showNotification('Login successful! Welcome back!', 'success');
+        return { success: true, user };
+    } catch (error) {
+        const errorMessage = handleFirebaseError(error);
+        showNotification(errorMessage, 'error');
+        return { success: false, error: errorMessage };
+    }
+}
+
+// Firebase logout function
+async function logoutFromFirebase() {
+    try {
+        await signOut(auth);
+        showNotification('You have been logged out successfully.', 'success');
+        
+        // Redirect to login page after logout
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        
+        return { success: true };
+    } catch (error) {
+        const errorMessage = handleFirebaseError(error);
+        showNotification(errorMessage, 'error');
+        return { success: false, error: errorMessage };
+    }
+}
+
+// Firebase password reset function
+async function resetPasswordWithFirebase(email) {
+    try {
+        await sendPasswordResetEmail(auth, email);
+        showNotification('Password reset email sent! Check your inbox.', 'success');
+        return { success: true };
+    } catch (error) {
+        const errorMessage = handleFirebaseError(error);
+        showNotification(errorMessage, 'error');
+        return { success: false, error: errorMessage };
+    }
+}
+
+// Check if user is logged in
+function isUserLoggedIn() {
+    return currentUser !== null;
+}
+
+// Get current user
+function getCurrentUser() {
+    return currentUser;
+}
+
+// Validate forms (keeping existing validation logic)
 function validateLoginForm() {
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     let isValid = true;
     
-    // Clear previous errors
     clearErrors();
     
-    // Email validation
     if (!email) {
         showError('loginEmail', 'Email is required');
         isValid = false;
@@ -169,12 +330,8 @@ function validateLoginForm() {
         showSuccess('loginEmail');
     }
     
-    // Password validation
     if (!password) {
         showError('loginPassword', 'Password is required');
-        isValid = false;
-    } else if (password.length < 6) {
-        showError('loginPassword', 'Password must be at least 6 characters');
         isValid = false;
     } else {
         showSuccess('loginPassword');
@@ -183,7 +340,6 @@ function validateLoginForm() {
     return isValid;
 }
 
-// Validate signup form
 function validateSignupForm() {
     const fullName = document.getElementById('fullName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
@@ -192,10 +348,8 @@ function validateSignupForm() {
     const agreeTerms = document.getElementById('agreeTerms').checked;
     let isValid = true;
     
-    // Clear previous errors
     clearErrors();
     
-    // Full name validation
     if (!fullName) {
         showError('fullName', 'Full name is required');
         isValid = false;
@@ -206,7 +360,6 @@ function validateSignupForm() {
         showSuccess('fullName');
     }
     
-    // Email validation
     if (!email) {
         showError('signupEmail', 'Email is required');
         isValid = false;
@@ -217,7 +370,6 @@ function validateSignupForm() {
         showSuccess('signupEmail');
     }
     
-    // Password validation
     const passwordValidation = validatePassword(password);
     if (!password) {
         showError('signupPassword', 'Password is required');
@@ -229,7 +381,6 @@ function validateSignupForm() {
         showSuccess('signupPassword');
     }
     
-    // Confirm password validation
     if (!confirmPassword) {
         showError('confirmPassword', 'Please confirm your password');
         isValid = false;
@@ -240,7 +391,6 @@ function validateSignupForm() {
         showSuccess('confirmPassword');
     }
     
-    // Terms validation
     if (!agreeTerms) {
         showNotification('Please agree to the Terms & Conditions', 'error');
         isValid = false;
@@ -249,15 +399,12 @@ function validateSignupForm() {
     return isValid;
 }
 
-// Validate forgot password form
 function validateForgotForm() {
     const email = document.getElementById('forgotEmail').value.trim();
     let isValid = true;
     
-    // Clear previous errors
     clearErrors();
     
-    // Email validation
     if (!email) {
         showError('forgotEmail', 'Email is required');
         isValid = false;
@@ -271,93 +418,151 @@ function validateForgotForm() {
     return isValid;
 }
 
+// Add logout functionality to navigation
+function addLogoutButton() {
+    const accountLink = document.querySelector('.account a');
+    if (accountLink && currentUser) {
+        accountLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (confirm('Are you sure you want to logout?')) {
+                const submitBtn = e.target.closest('a');
+                submitBtn.style.opacity = '0.6';
+                submitBtn.style.pointerEvents = 'none';
+                
+                await logoutFromFirebase();
+                
+                submitBtn.style.opacity = '1';
+                submitBtn.style.pointerEvents = 'auto';
+            }
+        });
+    }
+}
+
+// Initialize Firebase Auth State Listener
+function initializeAuthStateListener() {
+    onAuthStateChanged(auth, (user) => {
+        updateAuthUI(user);
+        if (user) {
+            addLogoutButton();
+        }
+    });
+}
+
 // Form submission handlers
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Firebase auth state listener
+    initializeAuthStateListener();
+    
     // Login form submission
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateLoginForm()) {
-            const submitBtn = document.querySelector('.login-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Simulate API call
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                showNotification('Login successful! Redirecting...', 'success');
+            if (validateLoginForm()) {
+                const submitBtn = document.querySelector('.login-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Logging in...';
+                submitBtn.disabled = true;
                 
-                // Redirect to home page after successful login
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            }, 2000);
-        }
-    });
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                const result = await loginWithFirebase(email, password);
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (result.success) {
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }
+            }
+        });
+    }
     
     // Signup form submission
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateSignupForm()) {
-            const submitBtn = document.querySelector('.signup-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Simulate API call
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                showNotification('Account created successfully! Please check your email for verification.', 'success');
+            if (validateSignupForm()) {
+                const submitBtn = document.querySelector('.signup-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account...';
+                submitBtn.disabled = true;
                 
-                // Switch to login form after successful signup
-                setTimeout(() => {
-                    switchToLogin();
-                }, 2000);
-            }, 2000);
-        }
-    });
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const password = document.getElementById('signupPassword').value;
+                
+                const result = await signupWithFirebase(email, password, fullName);
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (result.success) {
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }
+            }
+        });
+    }
     
     // Forgot password form submission
-    document.getElementById('forgotForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateForgotForm()) {
-            const submitBtn = document.querySelector('.forgot-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
+    const forgotForm = document.getElementById('forgotForm');
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Simulate API call
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                showNotification('Password reset link sent to your email!', 'success');
+            if (validateForgotForm()) {
+                const submitBtn = document.querySelector('.forgot-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
                 
-                // Switch to login form after sending reset link
-                setTimeout(() => {
-                    switchToLogin();
-                }, 2000);
-            }, 2000);
-        }
-    });
+                const email = document.getElementById('forgotEmail').value.trim();
+                
+                const result = await resetPasswordWithFirebase(email);
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (result.success) {
+                    setTimeout(() => {
+                        switchToLogin();
+                    }, 2000);
+                }
+            }
+        });
+    }
     
     // Real-time password strength checking
-    document.getElementById('signupPassword').addEventListener('input', function() {
-        updatePasswordStrength(this.value);
-    });
+    const signupPassword = document.getElementById('signupPassword');
+    if (signupPassword) {
+        signupPassword.addEventListener('input', function() {
+            updatePasswordStrength(this.value);
+        });
+    }
     
     // Real-time confirm password validation
-    document.getElementById('confirmPassword').addEventListener('blur', function() {
-        const password = document.getElementById('signupPassword').value;
-        const confirmPassword = this.value;
-        
-        if (confirmPassword && password !== confirmPassword) {
-            showError('confirmPassword', 'Passwords do not match');
-        } else if (confirmPassword && password === confirmPassword) {
-            showSuccess('confirmPassword');
-        }
-    });
+    const confirmPassword = document.getElementById('confirmPassword');
+    if (confirmPassword) {
+        confirmPassword.addEventListener('blur', function() {
+            const password = document.getElementById('signupPassword').value;
+            const confirmPasswordValue = this.value;
+            
+            if (confirmPasswordValue && password !== confirmPasswordValue) {
+                showError('confirmPassword', 'Passwords do not match');
+            } else if (confirmPasswordValue && password === confirmPasswordValue) {
+                showSuccess('confirmPassword');
+            }
+        });
+    }
     
     // Real-time email validation
     const emailInputs = ['loginEmail', 'signupEmail', 'forgotEmail'];
@@ -376,13 +581,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Update cart count on page load
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.CartUtils) {
-        const totalItems = CartUtils.getTotalCount();
-        const cartIcon = document.querySelector('.cart span');
-        if (cartIcon) {
-            cartIcon.textContent = totalItems;
-        }
-    }
-});
+// Make functions globally available
+window.switchToSignup = switchToSignup;
+window.switchToLogin = switchToLogin;
+window.showForgotPassword = showForgotPassword;
+window.togglePassword = togglePassword;
+window.isUserLoggedIn = isUserLoggedIn;
+window.getCurrentUser = getCurrentUser;
+window.logoutFromFirebase = logoutFromFirebase;
