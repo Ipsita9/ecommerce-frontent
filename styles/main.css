@@ -19,9 +19,33 @@ html {
     opacity: 1;
 }
 
+/* Prevent Vite hot reload flashing */
+body {
+    transition: none !important;
+}
+
+body.vite-dev {
+    transition: none !important;
+}
+
 /* Smooth loading for images */
 img {
     transition: opacity 0.3s ease;
+}
+
+/* Prevent layout shift during hot reload */
+.product-grid {
+    transition: none !important;
+}
+
+/* Disable transitions during development to prevent flashing */
+@media (max-width: 9999px) {
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 /* .container {

@@ -18,17 +18,23 @@ function updateCartCount() {
   }
 }
 
-// Initialize cart count on page load
-document.addEventListener("DOMContentLoaded", () => {
-  // Clean up any existing duplicates
-  if (window.CartUtils) {
-    CartUtils.removeDuplicates();
-  }
-  updateCartCount();
-  
-  // Ensure page is fully visible after loading
-  document.body.style.opacity = '1';
-});
+// Prevent multiple initializations during hot reload
+if (!window.appInitialized) {
+  // Initialize cart count on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    // Clean up any existing duplicates
+    if (window.CartUtils) {
+      CartUtils.removeDuplicates();
+    }
+    updateCartCount();
+    
+    // Ensure page is fully visible after loading
+    document.body.style.opacity = '1';
+    
+    // Mark as initialized
+    window.appInitialized = true;
+  });
+}
 
 // const productGrid = document.getElementById("productGrid");
 
