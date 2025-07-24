@@ -9,6 +9,19 @@ body {
     padding: 0;
     text-align: center;
     font-display: swap; /* Improve font loading performance */
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+}
+
+/* Prevent flash of unstyled content */
+html {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Smooth loading for images */
+img {
+    transition: opacity 0.3s ease;
 }
 
 /* .container {

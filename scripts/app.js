@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     CartUtils.removeDuplicates();
   }
   updateCartCount();
+  
+  // Ensure page is fully visible after loading
+  document.body.style.opacity = '1';
 });
 
 // const productGrid = document.getElementById("productGrid");
@@ -104,13 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorMessage = document.getElementById("errorMessage");
   const productGrid = document.getElementById("productGrid");
 
-  loadingMessage.style.display = "block";
-  errorMessage.style.display = "none";
+  if (loadingMessage) loadingMessage.style.display = "block";
+  if (errorMessage) errorMessage.style.display = "none";
+  
+  // Pre-allocate space to prevent layout shift
+  if (productGrid) {
+    productGrid.style.minHeight = "400px";
+  }
 
   fetch("https://fakestoreapi.com/products?limit=8")
     .then((res) => res.json())
     .then((data) => {
-      loadingMessage.style.display = "none";
+      if (loadingMessage) loadingMessage.style.display = "none";
+      if (productGrid) productGrid.style.minHeight = "auto";
 
       data.forEach((product) => {
         const card = document.createElement("div");

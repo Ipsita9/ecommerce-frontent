@@ -17,16 +17,23 @@ class PerformanceMonitor {
   measurePageLoad() {
     if ('performance' in window && 'timing' in window.performance) {
       const timing = window.performance.timing;
-      const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
-      const domContentLoadedTime = timing.domContentLoadedEventEnd - timing.navigationStart;
       
-      this.metrics.pageLoad = {
-        total: pageLoadTime,
-        domContentLoaded: domContentLoadedTime,
-        firstPaint: this.getFirstPaint()
-      };
-      
-      console.log('Page Performance Metrics:', this.metrics.pageLoad);
+      // Only calculate if timing values are valid
+      if (timing.loadEventEnd > 0 && timing.navigationStart > 0) {
+        const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
+        const domContentLoadedTime = timing.domContentLoadedEventEnd - timing.navigationStart;
+        
+        this.metrics.pageLoad = {
+          total: pageLoadTime,
+          domContentLoaded: domContentLoadedTime,
+          firstPaint: this.getFirstPaint()
+        };
+        
+        // Only log if values are reasonable
+        if (pageLoadTime > 0 && pageLoadTime < 60000) {
+          console.log('Page Performance Metrics:', this.metrics.pageLoad);
+        }
+      }
     }
   }
 
