@@ -5,8 +5,18 @@ function loadCart() {
   cartItemsContainer.innerHTML = "";
 
   if (cart.length === 0) {
-    cartItemsContainer.innerHTML = "<p class='empty-message'>🛒 Your cart is empty.</p>";
+    cartItemsContainer.innerHTML = `
+      <div class="empty-message">
+        Your cart is empty
+        <br><br>
+        <a href="products.html" class="btn" style="display: inline-block; margin-top: 20px;">
+          <i class="fa-solid fa-shopping-bag"></i> Start Shopping
+        </a>
+      </div>
+    `;
     document.getElementById("checkout-btn").disabled = true;
+    document.getElementById("cart-subtotal").textContent = "0.00";
+    document.getElementById("cart-shipping").textContent = "0.00";
     document.getElementById("cart-total").textContent = "0.00";
     document.getElementById("cart-count").textContent = "0";
     return;
@@ -62,9 +72,13 @@ function updateQuantity(index, delta) {
 }
 
 function updateCartSummary(cart) {
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const shipping = cart.length > 0 ? 5.99 : 0;
+  const total = subtotal + shipping;
 
+  document.getElementById("cart-subtotal").textContent = subtotal.toFixed(2);
+  document.getElementById("cart-shipping").textContent = shipping.toFixed(2);
   document.getElementById("cart-total").textContent = total.toFixed(2);
   document.getElementById("cart-count").textContent = totalItems;
   document.getElementById("checkout-btn").disabled = cart.length === 0;

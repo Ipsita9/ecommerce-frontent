@@ -64,14 +64,48 @@
         </header>
          <!-- Main Cart Section -->
           <main class="cart-container">
-            <h1>Your Shopping Cart</h1>
-            <div id="cart-items" class="cart-items"></div>
-
-            <div class="cart-summary">
-              <p>Total Items: <span id="cart-count">0</span></p>
-              <p>Total: ₹<span id="cart-total">0.00</span></p>
-              <button id="checkout-btn">Proceed to Checkout</button>
-              <button id="continue-shopping" class="continue-btn">Continue Shopping</button>
+            <div class="cart-header">
+                <h1><i class="fa-solid fa-shopping-cart"></i> Your Shopping Cart</h1>
+                <p class="cart-subtitle">Review your items before checkout</p>
+            </div>
+            
+            <div class="cart-content">
+                <div class="cart-items-section">
+                    <div id="cart-items" class="cart-items"></div>
+                </div>
+                
+                <div class="cart-sidebar">
+                    <div class="cart-summary">
+                        <h3><i class="fa-solid fa-receipt"></i> Order Summary</h3>
+                        <div class="summary-row">
+                            <span>Items:</span>
+                            <span id="cart-count">0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>$<span id="cart-subtotal">0.00</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span>$<span id="cart-shipping">5.99</span></span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span><strong>Total:</strong></span>
+                            <span><strong>$<span id="cart-total">0.00</span></strong></span>
+                        </div>
+                        
+                        <div class="cart-actions">
+                            <button id="checkout-btn" class="checkout-btn">
+                                <i class="fa-solid fa-credit-card"></i>
+                                Proceed to Checkout
+                            </button>
+                            <button id="continue-shopping" class="continue-btn">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
           </main>
 
