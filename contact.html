@@ -1,0 +1,409 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contact Us - E-Commerce Frontend</title>
+
+        <!-- Critical performance optimization -->
+        <link rel="preload" href="styles/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="preload" href="scripts/app.js" as="script">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+        <!-- Critical CSS inline -->
+        <style>
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;padding:0;opacity:1;transition:opacity .1s ease-in-out}
+        .navbar{display:flex;align-items:center;justify-content:space-between;padding:20px;background:#c7a1b3;width:100%;margin:0}
+        .contact-hero{background:linear-gradient(135deg,#ff6f61,#c7a1b3);color:white;padding:100px 20px;text-align:center}
+        .contact-section{padding:60px 20px;max-width:1200px;margin:0 auto}
+        </style>
+        
+        <!-- Non-critical CSS loaded asynchronously -->
+        <noscript><link rel="stylesheet" href="styles/main.css"></noscript>
+        
+        <!-- Font Awesome -->
+        <link
+            rel="preload"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            as="style"
+            onload="this.onload=null;this.rel='stylesheet'"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
+    </head>
+
+    <body>
+        <header>
+            <div class="container">
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="logo2.png" width="50" height="50" alt="Logo" loading="lazy" onerror="this.src='placeholder.png'; this.onerror=null;">
+                    </div>
+                    <div class="hamburger" onclick="toggleMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="nav" id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Product</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html" class="active">Contact</a></li>
+                        </ul>
+                        <div class="right-nav">
+                            <div class="search-bar">
+                                <input type="text" placeholder="search for products" />
+                                <button type="submit">Search</button>
+                            </div>
+                            <div class="account">
+                                <a href="login.html"><i class="fa-solid fa-circle-user"></i></a>
+                            </div>
+                            <div class="cart">
+                                <a href="cart.html">
+                                    <img src="c.jpg" width="30" height="30" alt="Cart" loading="lazy" onerror="this.src='placeholder.png'; this.onerror=null;">
+                                </a>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contact Hero Section -->
+        <section class="contact-hero">
+            <div class="container">
+                <h1>Get in Touch</h1>
+                <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-form-wrapper">
+                        <h2><i class="fa-solid fa-envelope"></i> Send us a Message</h2>
+                        <form id="contactForm" class="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                    <span class="error-message" id="firstNameError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                    <span class="error-message" id="lastNameError"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" required>
+                                    <span class="error-message" id="emailError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone">
+                                    <span class="error-message" id="phoneError"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Customer Support</option>
+                                    <option value="orders">Order Issues</option>
+                                    <option value="returns">Returns & Refunds</option>
+                                    <option value="partnership">Partnership Opportunities</option>
+                                    <option value="feedback">Feedback & Suggestions</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <span class="error-message" id="subjectError"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" rows="6" placeholder="Please provide details about your inquiry..." required></textarea>
+                                <span class="error-message" id="messageError"></span>
+                            </div>
+                            
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="newsletter" name="newsletter">
+                                    <span class="checkmark"></span>
+                                    Subscribe to our newsletter for updates and special offers
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary contact-submit-btn">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Send Message
+                            </button>
+                        </form>
+                        
+                        <div id="contactSuccess" class="success-message" style="display: none;">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <h3>Message Sent Successfully!</h3>
+                            <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-wrapper">
+                        <h2><i class="fa-solid fa-map-marker-alt"></i> Contact Information</h2>
+                        
+                        <div class="contact-info-cards">
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fa-solid fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>Our Office</h4>
+                                    <p>123 E-Commerce Street<br>Business District<br>Mumbai, Maharashtra 400001<br>India</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>Phone Numbers</h4>
+                                    <p>Customer Support: <a href="tel:+911234567890">+91 123 456 7890</a><br>
+                                    Sales: <a href="tel:+911234567891">+91 123 456 7891</a><br>
+                                    General: <a href="tel:+911234567892">+91 123 456 7892</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>Email Addresses</h4>
+                                    <p>Support: <a href="mailto:support@ecommerce.com">support@ecommerce.com</a><br>
+                                    Sales: <a href="mailto:sales@ecommerce.com">sales@ecommerce.com</a><br>
+                                    General: <a href="mailto:info@ecommerce.com">info@ecommerce.com</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>Business Hours</h4>
+                                    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                    Saturday: 10:00 AM - 4:00 PM<br>
+                                    Sunday: Closed<br>
+                                    <small>IST (Indian Standard Time)</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-contact">
+                            <h4>Follow Us</h4>
+                            <div class="social-links">
+                                <a href="#" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                                <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="contact-section" style="background-color: #f8f9fa;">
+            <div class="container">
+                <h2><i class="fa-solid fa-question-circle"></i> Frequently Asked Questions</h2>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-shipping-fast"></i> What are your shipping options?</h4>
+                        <p>We offer standard (3-5 days) and express (1-2 days) shipping options. Free shipping is available on orders over ₹999.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-undo"></i> What is your return policy?</h4>
+                        <p>We accept returns within 30 days of purchase. Items must be in original condition with tags attached.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-credit-card"></i> What payment methods do you accept?</h4>
+                        <p>We accept all major credit cards, debit cards, UPI, net banking, and cash on delivery.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-truck"></i> How can I track my order?</h4>
+                        <p>Once your order ships, you'll receive a tracking number via email and SMS to monitor your package.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-shield-alt"></i> Is my personal information secure?</h4>
+                        <p>Yes, we use SSL encryption and follow industry-standard security practices to protect your data.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fa-solid fa-headset"></i> How can I reach customer support?</h4>
+                        <p>You can reach us via phone, email, or the contact form above. We respond within 24 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="map-section">
+            <div class="container">
+                <h2><i class="fa-solid fa-map"></i> Find Us</h2>
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <i class="fa-solid fa-map-marker-alt"></i>
+                        <h3>Our Location</h3>
+                        <p>123 E-Commerce Street, Business District<br>Mumbai, Maharashtra 400001, India</p>
+                        <a href="https://maps.google.com/?q=Mumbai,Maharashtra,India" target="_blank" class="btn btn-outline">
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scripts -->
+        <script src="scripts/cart-utils.js"></script>
+        <script src="scripts/app.js"></script>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize cart count
+                if (typeof updateCartCount === 'function') {
+                    updateCartCount();
+                }
+                
+                // Hamburger menu functionality
+                window.toggleMenu = function() {
+                    const nav = document.getElementById('nav');
+                    nav.classList.toggle('show');
+                };
+                
+                // Contact form functionality
+                const contactForm = document.getElementById('contactForm');
+                const contactSuccess = document.getElementById('contactSuccess');
+                
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (validateContactForm()) {
+                        // Simulate form submission
+                        const submitBtn = contactForm.querySelector('.contact-submit-btn');
+                        const originalText = submitBtn.innerHTML;
+                        
+                        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+                        submitBtn.disabled = true;
+                        
+                        setTimeout(() => {
+                            contactForm.style.display = 'none';
+                            contactSuccess.style.display = 'block';
+                            
+                            // Reset form after 5 seconds
+                            setTimeout(() => {
+                                contactForm.reset();
+                                contactForm.style.display = 'block';
+                                contactSuccess.style.display = 'none';
+                                submitBtn.innerHTML = originalText;
+                                submitBtn.disabled = false;
+                                clearFormErrors();
+                            }, 5000);
+                        }, 1500);
+                    }
+                });
+                
+                // Form validation
+                function validateContactForm() {
+                    let isValid = true;
+                    clearFormErrors();
+                    
+                    // Validate required fields
+                    const requiredFields = ['firstName', 'lastName', 'email', 'subject', 'message'];
+                    requiredFields.forEach(fieldName => {
+                        const field = document.getElementById(fieldName);
+                        if (!field.value.trim()) {
+                            showFieldError(fieldName, 'This field is required');
+                            isValid = false;
+                        }
+                    });
+                    
+                    // Validate email format
+                    const email = document.getElementById('email');
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (email.value && !emailRegex.test(email.value)) {
+                        showFieldError('email', 'Please enter a valid email address');
+                        isValid = false;
+                    }
+                    
+                    // Validate phone if provided
+                    const phone = document.getElementById('phone');
+                    const phoneRegex = /^[\+]?[1-9][\d]{9,14}$/;
+                    if (phone.value && !phoneRegex.test(phone.value.replace(/[\s\-\(\)]/g, ''))) {
+                        showFieldError('phone', 'Please enter a valid phone number');
+                        isValid = false;
+                    }
+                    
+                    return isValid;
+                }
+                
+                function showFieldError(fieldName, message) {
+                    const field = document.getElementById(fieldName);
+                    const errorElement = document.getElementById(fieldName + 'Error');
+                    
+                    field.style.borderColor = '#ff4444';
+                    if (errorElement) {
+                        errorElement.textContent = message;
+                        errorElement.style.display = 'block';
+                    }
+                }
+                
+                function clearFormErrors() {
+                    const fields = contactForm.querySelectorAll('input, select, textarea');
+                    const errorElements = contactForm.querySelectorAll('.error-message');
+                    
+                    fields.forEach(field => {
+                        field.style.borderColor = '#ddd';
+                    });
+                    
+                    errorElements.forEach(error => {
+                        error.style.display = 'none';
+                        error.textContent = '';
+                    });
+                }
+                
+                // Real-time validation
+                document.getElementById('email').addEventListener('blur', function() {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (this.value && !emailRegex.test(this.value)) {
+                        showFieldError('email', 'Please enter a valid email address');
+                    }
+                });
+                
+                document.getElementById('phone').addEventListener('blur', function() {
+                    const phoneRegex = /^[\+]?[1-9][\d]{9,14}$/;
+                    if (this.value && !phoneRegex.test(this.value.replace(/[\s\-\(\)]/g, ''))) {
+                        showFieldError('phone', 'Please enter a valid phone number');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
