@@ -31,7 +31,7 @@
                     <div class="logo">
                         <picture>
                             <source srcset="logo2.webp" type="image/webp">
-                            <img src="logo2.png" width="50px" height="50px" alt="Logo" loading="lazy" onerror="this.src='placeholder.png'">
+                            <img src="logo2.png" width="50px" height="50px" alt="Logo" loading="lazy" onerror="this.src='placeholder.png'; this.onerror=null;">
                         </picture>
                     </div>
                     <div class="hamburger" onclick="toggleMenu()">
@@ -63,7 +63,7 @@
                                 <a href="cart.html">
                                     <picture>
                                         <source srcset="c.webp" type="image/webp">
-                                        <img src="c.jpg" width="30" height="30" alt="Cart" loading="lazy" onerror="this.src='placeholder.png'">
+                                        <img src="c.jpg" width="30" height="30" alt="Cart" loading="lazy" onerror="this.src='placeholder.png'; this.onerror=null;">
                                     </picture>
                                 </a>
                                 <span>0</span>
@@ -94,7 +94,35 @@
         <script src="scripts/lazy-loading.js"></script>
         <script src="scripts/performance-monitor.js"></script>
         <script src="scripts/image-optimizer.js"></script>
+        <script src="scripts/products.js"></script>
         <script src="scripts/app.js"></script>
         <script type="module" src="firebase-config.js"></script>
+        <script>
+            // Initialize performance monitoring
+            const performanceMonitor = new PerformanceMonitor();
+            
+            // Handle script loading errors
+            window.addEventListener('error', function(e) {
+                if (e.target.tagName === 'SCRIPT') {
+                    console.error('Failed to load script:', e.target.src);
+                }
+            });
+            
+            // Ensure DOM is ready before initializing
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('E-Commerce Website Loaded');
+                
+                // Initialize cart count
+                if (typeof updateCartCount === 'function') {
+                    updateCartCount();
+                }
+                
+                // Initialize hamburger menu
+                window.toggleMenu = function() {
+                    const nav = document.getElementById('nav');
+                    nav.classList.toggle('show');
+                };
+            });
+        </script>
     </body>
 </html>
