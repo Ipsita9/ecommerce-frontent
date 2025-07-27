@@ -31,13 +31,13 @@ function loadCart() {
       <div class="item-details">
         <h4>${item.title}</h4>
         <p><strong>Size:</strong> ${item.size || 'M'}</p>
-        <p><strong>Unit Price:</strong> $${item.price.toFixed(2)}</p>
+        <p><strong>Unit Price:</strong> ₹${item.price.toFixed(2)}</p>
         <div class="quantity-controls">
           <button class="decrease" data-index="${index}">−</button>
           <span class="qty">${item.quantity}</span>
           <button class="increase" data-index="${index}">+</button>
         </div>
-        <p><strong>Subtotal:</strong> $${(item.price * item.quantity).toFixed(2)}</p>
+        <p><strong>Subtotal:</strong> ₹${(item.price * item.quantity).toFixed(2)}</p>
         <button class="remove-btn" data-index="${index}">🗑️ Remove</button>
       </div>
     `;

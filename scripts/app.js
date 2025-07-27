@@ -27,10 +27,10 @@ if (!window.appInitialized) {
       CartUtils.removeDuplicates();
     }
     updateCartCount();
-    
+
     // Ensure page is fully visible after loading
     document.body.style.opacity = '1';
-    
+
     // Mark as initialized
     window.appInitialized = true;
   });
@@ -115,7 +115,7 @@ if (!window.appInitialized) {
 
   if (loadingMessage) loadingMessage.style.display = "block";
   if (errorMessage) errorMessage.style.display = "none";
-  
+
   // Pre-allocate space to prevent layout shift
   if (productGrid) {
     productGrid.style.minHeight = "400px";
@@ -127,9 +127,16 @@ if (!window.appInitialized) {
       if (loadingMessage) loadingMessage.style.display = "none";
       if (productGrid) productGrid.style.minHeight = "auto";
 
-      data.forEach((product) => {
+      // Store data globally for cart functionality
+      window.homepageProducts = data;
+
+      data.forEach((product, index) => {
         const card = document.createElement("div");
         card.classList.add("product-card");
+        card.dataset.productIndex = index; // Store index for reference
+
+        // Convert price to INR for display
+        const priceInINR = (product.price * 80).toFixed(2);
 
         card.innerHTML = `
           <picture>
@@ -142,7 +149,7 @@ if (!window.appInitialized) {
           </picture>
           <h3>${product.title}</h3>
           <p class="description">${product.description.substring(0, 100)}...</p>
-          <div class="price">$${product.price.toFixed(2)}</div>
+          <div class="price">₹${priceInINR}</div>
           <button class="btn add-to-cart">Add to Cart</button>
         `;
 
@@ -154,12 +161,12 @@ if (!window.appInitialized) {
         button.addEventListener("click", (e) => {
           const productCard = e.target.closest(".product-card");
           const productTitle = productCard.querySelector("h3").textContent;
-          const productPrice = parseFloat(productCard.querySelector(".price").textContent.replace("$", ""));
+          const productPrice = parseFloat(productCard.querySelector(".price").textContent.replace("₹", ""));
           const productImage = productCard.querySelector("img").src;
-          
+
           const productId = `homepage-${index}`;
           const uniqueId = `${productId}-M`; // Default size M for homepage products
-          
+
           const newItem = {
             id: productId,
             uniqueId: uniqueId,
@@ -169,10 +176,10 @@ if (!window.appInitialized) {
             size: "M", // Default size
             quantity: 1
           };
-          
+
           // Use CartUtils to add item with duplicate checking
           const result = CartUtils.addToCart(newItem);
-          
+
           alert(result.message);
           updateCartCount();
         });
