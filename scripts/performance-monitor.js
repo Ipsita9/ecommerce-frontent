@@ -90,24 +90,108 @@ class PerformanceMonitor {
     }
   }
 
+  // Monitor Core Web Vitals
+  measureCoreWebVitals() {
+    // First Input Delay (FID)
+    if ('PerformanceObserver' in window) {
+      const fidObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          this.metrics.fid = entry.processingStart - entry.startTime;
+          console.log('First Input Delay:', this.metrics.fid);
+        }
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+
+      // Cumulative Layout Shift (CLS)
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        }
+        this.metrics.cls = clsValue;
+        console.log('Cumulative Layout Shift:', this.metrics.cls);
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    }
+  }
+
+  // Monitor resource loading
+  measureResourceTiming() {
+    if ('performance' in window && 'getEntriesByType' in window.performance) {
+      const resources = window.performance.getEntriesByType('resource');
+      
+      this.metrics.resources = {
+        slowestResource: null,
+        totalSize: 0,
+        totalTime: 0,
+        count: resources.length
+      };
+      
+      let slowestTime = 0;
+      resources.forEach(resource => {
+        const duration = resource.responseEnd - resource.startTime;
+        this.metrics.resources.totalTime += duration;
+        
+        if (duration > slowestTime) {
+          slowestTime = duration;
+          this.metrics.resources.slowestResource = {
+            name: resource.name,
+            duration: Math.round(duration),
+            size: resource.transferSize || 0
+          };
+        }
+        
+        this.metrics.resources.totalSize += resource.transferSize || 0;
+      });
+      
+      console.log('Resource Timing:', this.metrics.resources);
+    }
+  }
+
   // Report performance metrics
   getMetrics() {
+    this.measureCoreWebVitals();
+    this.measureResourceTiming();
     return this.metrics;
   }
 
-  // Log performance recommendations
+  // Enhanced performance recommendations
   getRecommendations() {
     const recommendations = [];
     
     if (this.metrics.pageLoad && this.metrics.pageLoad.total > 3000) {
-      recommendations.push('Page load time is over 3 seconds. Consider optimizing images and reducing file sizes.');
+      recommendations.push('⚠️ Page load time is over 3 seconds. Consider optimizing images and reducing file sizes.');
     }
     
     if (this.metrics.lcp && this.metrics.lcp > 2500) {
-      recommendations.push('Largest Contentful Paint is over 2.5 seconds. Optimize your largest image or text block.');
+      recommendations.push('🎯 LCP is over 2.5 seconds. Optimize your largest image or text block.');
+    }
+    
+    if (this.metrics.fid && this.metrics.fid > 100) {
+      recommendations.push('⏱️ First Input Delay is over 100ms. Reduce JavaScript execution time.');
+    }
+    
+    if (this.metrics.cls && this.metrics.cls > 0.1) {
+      recommendations.push('📐 Cumulative Layout Shift is high. Set explicit dimensions for images and containers.');
+    }
+    
+    if (this.metrics.resources && this.metrics.resources.slowestResource && this.metrics.resources.slowestResource.duration > 1000) {
+      recommendations.push(`🐌 Slowest resource: ${this.metrics.resources.slowestResource.name} (${this.metrics.resources.slowestResource.duration}ms)`);
     }
     
     return recommendations;
+  }
+
+  // Auto-optimize based on metrics
+  autoOptimize() {
+    const recommendations = this.getRecommendations();
+    if (recommendations.length > 0) {
+      console.group('🚀 Performance Recommendations:');
+      recommendations.forEach(rec => console.log(rec));
+      console.groupEnd();
+    }
   }
 }
 

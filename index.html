@@ -5,23 +5,42 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>E-Commerce Frontend</title>
 
-        <!-- Performance optimization -->
-        <link rel="preload" href="styles/main.css" as="style">
+        <!-- Critical performance optimization -->
+        <link rel="preload" href="styles/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <link rel="preload" href="scripts/app.js" as="script">
-        <link rel="preconnect" href="https://fakestoreapi.com">
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+        <link rel="preload" href="first.png" as="image">
+        <link rel="preconnect" href="https://fakestoreapi.com" crossorigin>
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
         <!-- DNS prefetch for external resources -->
         <link rel="dns-prefetch" href="//fakestoreapi.com">
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-        <link rel="stylesheet" href="styles/main.css" />
+        
+        <!-- Critical CSS inline -->
+        <style>
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;padding:0;opacity:1;transition:opacity .1s ease-in-out}
+        .navbar{display:flex;align-items:center;justify-content:space-between;padding:20px;background:#c7a1b3;width:100%;margin:0}
+        .hero{height:100vh;background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('first.png') no-repeat center/cover;display:flex;align-items:center;justify-content:center;text-align:center;color:white;padding:20px}
+        .hero-content h1{font-size:3rem;margin-bottom:20px}.hero-content p{font-size:1.5rem;margin-bottom:30px}
+        .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+        img{transition:opacity .3s ease}
+        </style>
+        
+        <!-- Non-critical CSS loaded asynchronously -->
+        <link rel="preload" href="styles/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="styles/main.css"></noscript>
+        
+        <!-- Defer Font Awesome loading -->
         <link
-            rel="stylesheet"
+            rel="preload"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            as="style"
+            onload="this.onload=null;this.rel='stylesheet'"
             integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
     </head>
 
     <body>
@@ -84,27 +103,38 @@
             </div>
         </section>
 
+        <!-- Critical scripts loaded immediately -->
         <script src="scripts/cart-utils.js"></script>
-        <script src="scripts/lazy-loading.js"></script>
-        <script src="scripts/performance-monitor.js"></script>
-        <script src="scripts/image-optimizer.js"></script>
-        <script src="scripts/products.js"></script>
         <script src="scripts/app.js"></script>
-        <script type="module" src="firebase-config.js"></script>
+        
+        <!-- Non-critical scripts deferred -->
+        <script src="scripts/resource-optimizer.js" defer></script>
+        <script src="scripts/lazy-loading.js" defer></script>
+        <script src="scripts/performance-monitor.js" defer></script>
+        <script src="scripts/image-optimizer.js" defer></script>
+        <script src="scripts/products.js" defer></script>
+        <script type="module" src="firebase-config.js" defer></script>
         <script>
-            // Initialize performance monitoring
-            const performanceMonitor = new PerformanceMonitor();
-            
-            // Handle script loading errors
-            window.addEventListener('error', function(e) {
-                if (e.target.tagName === 'SCRIPT') {
-                    console.error('Failed to load script:', e.target.src);
-                }
-            });
-            
-            // Ensure DOM is ready before initializing
+            // Initialize performance monitoring with enhanced features
             document.addEventListener('DOMContentLoaded', function() {
                 console.log('E-Commerce Website Loaded');
+                
+                // Initialize performance monitoring
+                if (typeof PerformanceMonitor !== 'undefined') {
+                    const performanceMonitor = new PerformanceMonitor();
+                    window.performanceMonitor = performanceMonitor;
+                    
+                    // Auto-optimize after load
+                    setTimeout(() => {
+                        performanceMonitor.autoOptimize();
+                    }, 2000);
+                }
+                
+                // Initialize resource optimizer
+                if (typeof ResourceOptimizer !== 'undefined') {
+                    const resourceOptimizer = new ResourceOptimizer();
+                    resourceOptimizer.inlineCriticalCSS();
+                }
                 
                 // Initialize cart count
                 if (typeof updateCartCount === 'function') {
@@ -116,7 +146,27 @@
                     const nav = document.getElementById('nav');
                     nav.classList.toggle('show');
                 };
+                
+                // Add performance dashboard access
+                window.openPerformanceDashboard = function() {
+                    window.open('performance-dashboard.html', 'performance', 'width=1200,height=800');
+                };
             });
+            
+            // Handle script loading errors
+            window.addEventListener('error', function(e) {
+                if (e.target.tagName === 'SCRIPT') {
+                    console.error('Failed to load script:', e.target.src);
+                }
+            });
+            
+            // Service Worker registration for caching (if available)
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    // Note: You can implement a service worker for additional caching
+                    console.log('Service Worker support detected');
+                });
+            }
         </script>
     </body>
 </html>
